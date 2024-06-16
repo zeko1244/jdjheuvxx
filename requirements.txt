@@ -76,9 +76,7 @@ vcsi
 ipaddress
 wand
 ujson==5.8.0
-youtube_dl==2021.5.16
 randomstuff.py
 git+https://github.com/buddhhu/img2html.git
-git+https://github.com/alexmercerind/youtube-search-python
 git+https://github.com/redaiq90/webcolors
 git+https://github.com/redaiq90/py-googletrans
