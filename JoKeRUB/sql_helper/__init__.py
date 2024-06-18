@@ -1,5 +1,6 @@
 import os
-from sqlalchemy import create_engine                                               from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 # the secret configuration specific things
@@ -21,4 +22,5 @@ try:
     SESSION = start()                                                              
 except AttributeError as e:
     # this is a dirty way for the work-around required for #23
-    LOGS.error("DB_URI" is not configured. Features depending on the database might$    LOGS.error(str(e))
+    LOGS.error("DB_URI is not configured. لم تضع فار قاعدة البيانات لن يعمل السورس")
+    LOGS.error(str(e))
