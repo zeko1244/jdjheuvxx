@@ -3,8 +3,6 @@ pydub
 ocrspace
 ShazamAPI
 selenium
-Flask
-flask_restful
 setuptools
 wheel
 cloudscraper
@@ -41,7 +39,6 @@ humanize
 justwatch
 kwot
 lottie
-lxml
 covid
 jikanpy
 lyricsgenius
