@@ -32,7 +32,7 @@ logging.getLogger('telethon').setLevel(logging.WARNING)
 ##Reda hands here
 cmdhr = Config.COMMAND_HAND_LER
 bot = l313l
-ENV = bool(os.environ.get("ENV", False))
+ENV = True
 
 if ENV:
     VPS_NOLOAD = ["سيرفر"]
