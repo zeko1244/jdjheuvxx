@@ -1,6 +1,5 @@
 import asyncio
 from datetime import datetime
-from ALJoker import languages
 from telethon.tl import functions, types
 from JoKeRUB.helpers.functions.functions import translate 
 from JoKeRUB import CMD_HELP, l313l
