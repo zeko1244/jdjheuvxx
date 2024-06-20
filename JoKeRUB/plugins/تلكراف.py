@@ -119,7 +119,7 @@ async def _(event):
         end = datetime.now()
         ms = (end - start).seconds
         joker = f"https://telegra.ph/{response['path']}"
-        await jmevent.edit(
+        await jokevent.edit(
             f"** ⌔︙الـرابـط : ** [اضغـط هنـا]({joker})\
                  \n** ⌔︙الـوقـت المـأخـوذ : **`{ms} ثـانيـة.`",
             link_preview=False,
