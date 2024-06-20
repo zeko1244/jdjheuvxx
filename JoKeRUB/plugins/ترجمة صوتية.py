@@ -3,7 +3,6 @@ from telethon import functions
 import subprocess
 from JoKeRUB.helpers.functions.functions import translate
 from datetime import datetime
-from ALJoker import get_string
 
 
 
