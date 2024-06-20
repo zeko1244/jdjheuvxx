@@ -1,5 +1,5 @@
 from sample_config import Config
-
+import os
 
 class Development(Config):
     # get this values from the my.telegram.org
@@ -20,6 +20,7 @@ class Development(Config):
         or os.environ.get("PM_LOGGR_BOT_API_ID")
         or 0
     )
+    PRIVATE_GROUP_BOT_API_ID = int(os.environ.get("PRIVATE_GROUP_BOT_API_ID") or 0)
     # sudo enter the id of sudo users userid's in that array
     SUDO_USERS = []
     # command hanler for sudo
