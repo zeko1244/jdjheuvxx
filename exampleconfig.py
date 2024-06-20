@@ -12,6 +12,7 @@ class Development(Config):
     # create a new bot in @botfather and fill the following vales with bottoken and username respectively
     TG_BOT_TOKEN = "Your value"
     # command handler
+    TZ = "Asia/Baghdad"
     COMMAND_HAND_LER = "."
     # sudo enter the id of sudo users userid's in that array
     SUDO_USERS = []
