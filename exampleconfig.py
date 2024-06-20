@@ -1,6 +1,4 @@
 from sample_config import Config
-import os
-
 class Development(Config):
     # get this values from the my.telegram.org
     APP_ID = 6
@@ -15,12 +13,6 @@ class Development(Config):
     TG_BOT_TOKEN = "Your value"
     # command handler
     COMMAND_HAND_LER = "."
-    PM_LOGGER_GROUP_ID = int(
-        os.environ.get("PM_LOGGER_GROUP_ID")
-        or os.environ.get("PM_LOGGR_BOT_API_ID")
-        or 0
-    )
-    PRIVATE_GROUP_BOT_API_ID = int(os.environ.get("PRIVATE_GROUP_BOT_API_ID") or 0)
     # sudo enter the id of sudo users userid's in that array
     SUDO_USERS = []
     # command hanler for sudo
