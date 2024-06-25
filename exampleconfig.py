@@ -1,5 +1,4 @@
 from sample_config import Config
-import os
 class Development(Config):
     # get this values from the my.telegram.org
     APP_ID = Your value
@@ -13,7 +12,6 @@ class Development(Config):
     # create a new bot in @botfather and fill the following vales with bottoken and username respectively
     TG_BOT_TOKEN = "Your value"
     # command handler
-    TZ = os.environ.get("TZ", "Asia/Baghdad")
     COMMAND_HAND_LER = "."
     # sudo enter the id of sudo users userid's in that array
     SUDO_USERS = []
