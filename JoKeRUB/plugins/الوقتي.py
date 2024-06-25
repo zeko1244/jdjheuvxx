@@ -6,6 +6,7 @@
 from ..sql_helper.group import auto_g, del_auto_g, get_auto_g
 import webcolors
 import asyncio
+import pytz
 import base64
 import os
 import shutil
@@ -47,11 +48,14 @@ namew8t = Config.NAME_ET or "اسم وقتي"
 biow8t = Config.BIO_ET or "بايو وقتي"
 phow8t = Config.PHOTO_ET or "الصورة الوقتية"
 TIMEZONES = {
-    "العراق": "Asia/Baghdad",
+    "بغداد": "Asia/Baghdad",
     "السعودية": "Asia/Riyadh",
     "مصر": "Africa/Cairo",
     "اليمن": "Asia/Aden",
+    "سوريا": "Asia/Damascus",
+    "الأردن": "Asia/Amman",
 }
+
 
 
 joker_timezone = pytz.timezone('Asia/Baghdad')
