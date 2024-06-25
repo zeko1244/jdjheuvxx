@@ -39,7 +39,6 @@ digitalpic_path = os.path.join(os.getcwd(), "JoKeRUB", "digital_pic.png")
 digital_group_pic_path = os.path.join(os.getcwd(), "JoKeRUB", "digital_group_pic.png")
 autophoto_path = os.path.join(os.getcwd(), "JoKeRUB", "photo_pfp.png")
 auto_group_photo_path = os.path.join(os.getcwd(), "JoKeRUB", "photo_pfp.png")
-
 digitalpfp = Config.DIGITAL_PIC or "https://telegra.ph/file/63a826d5e5f0003e006a0.jpg"
 digitalgrouppfp = Config.DIGITAL_GROUP_PIC or "https://telegra.ph/file/63a826d5e5f0003e006a0.jpg"
 jep = Config.DEFAULT_PIC or "JoKeRUB/helpers/styles/PaybAck.ttf"
@@ -47,6 +46,28 @@ normzltext = "1234567890"
 namew8t = Config.NAME_ET or "اسم وقتي"
 biow8t = Config.BIO_ET or "بايو وقتي"
 phow8t = Config.PHOTO_ET or "الصورة الوقتية"
+TIMEZONES = {
+    "العراق": "Asia/Baghdad",
+    "السعودية": "Asia/Riyadh",
+    "مصر": "Africa/Cairo",
+    "اليمن": "Asia/Aden",
+}
+
+
+joker_timezone = pytz.timezone('Asia/Baghdad')
+
+async def aljoker_timezone(event, tz_name):
+    global joker_timezone
+    if tz_name in TIMEZONES:
+        joker_timezone = pytz.timezone(TIMEZONES[tz_name])
+        await event.edit(f"**᯽︙ تم تغيير المنطقة الزمنية إلى: {tz_name}**")
+    else:
+        await event.edit("**᯽︙ عذراً المنطقة الزمنية هذه لم تتم إضافتها إلى الان** ")
+
+@l313l.on(admin_cmd(pattern="وقت (.+)"))
+async def handle_timezone(event):
+    tz_name = event.pattern_match.group(1).strip()
+    await aljoker_timezone(event, tz_name)
 
 def check_color(color):
     try:
@@ -73,7 +94,7 @@ async def digitalpicloop():
                 pass
         shutil.copy(digitalpic_path, autophoto_path)
         Image.open(autophoto_path)
-        current_time = datetime.now().strftime("%I:%M")
+        current_time = datetime.now(joker_timezone).strftime("%I:%M")
         img = Image.open(autophoto_path)
         drawn_text = ImageDraw.Draw(img)
         fnt = ImageFont.truetype(jep, 65)
@@ -116,7 +137,7 @@ async def digitalgrouppicloop():
                 pass
         shutil.copy(digital_group_pic_path, autophoto_path)
         Image.open(auto_group_photo_path)
-        current_time = datetime.now().strftime("%I:%M")
+        current_time = datetime.now(joker_timezone).strftime("%I:%M")
         img = Image.open(auto_group_photo_path)
         drawn_text = ImageDraw.Draw(img)
         fnt = ImageFont.truetype(jep, 65)
@@ -150,7 +171,7 @@ async def group_loop():
     AUTONAMESTAR = ag != None
     while AUTONAMESTAR:
         time.strftime("%d-%m-%y")
-        HM = time.strftime("%I:%M")
+        HM = datetime.now(joker_timezone).strftime("%I:%M")
         for normal in HM:
             if normal in normzltext:
                 namefont = namerzfont[normzltext.index(normal)]
@@ -175,7 +196,7 @@ async def autoname_loop():
     AUTONAMESTART = gvarstatus("autoname") == "true"
     while AUTONAMESTART:
         time.strftime("%d-%m-%y")
-        HM = time.strftime("%I:%M")
+        HM = datetime.now(joker_timezone).strftime("%I:%M")
         for normal in HM:
             if normal in normzltext:
                 namerzfont = gvarstatus("JP_FN") or "𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗𝟎"
@@ -197,7 +218,7 @@ async def autobio_loop():
     AUTOBIOSTART = gvarstatus("autobio") == "true"
     while AUTOBIOSTART:
         time.strftime("%d.%m.%Y")
-        HI = time.strftime("%I:%M")
+        HI = datetime.now(current_timezone).strftime("%I:%M")
         for normal in HI:
             if normal in normzltext:
                 namerzfont = gvarstatus("JP_FN") or "𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗𝟎"
