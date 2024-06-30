@@ -312,13 +312,10 @@ async def aljoker_allnshr(l313l, sleeptimet, message):
     while yaAli:
         for chat in aljoker_chats:
             if chat.is_group:
-                try:
-                    if message.media:
-                        await l313l.send_file(chat.id, message.media, caption=message.text)
-                    else:
-                        await l313l.send_message(chat.id, message.text)
-                except Exception as e:
-                    print(f"Error in sending message to chat {chat.id}: {e}")
+                if message.media:
+                    await l313l.send_file(chat.id, message.media, caption=message.text)
+                else:
+                    await l313l.send_message(chat.id, message.text)
         await asyncio.sleep(sleeptimet)
 @l313l.ar_cmd(pattern="نشر_كروبات")
 async def Hussein(event):
@@ -344,13 +341,10 @@ async def aljoker_supernshr(l313l, sleeptimet, message):
         for chat in aljoker_chats:
             chat_title_lower = chat.title.lower()
             if chat.is_group and any(keyword in chat_title_lower for keyword in super_groups):
-                try:
-                    if message.media:
-                        await l313l.send_file(chat.id, message.media, caption=message.text)
-                    else:
-                        await l313l.send_message(chat.id, message.text)
-                except Exception as e:
-                    print(f"Error in sending message to chat {chat.id}: {e}")
+                if message.media:
+                    await l313l.send_file(chat.id, message.media, caption=message.text)
+                else:
+                    await l313l.send_message(chat.id, message.text)
         await asyncio.sleep(sleeptimet)
 @l313l.ar_cmd(pattern="سوبر")
 async def Hussein(event):
