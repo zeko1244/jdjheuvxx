@@ -56,7 +56,7 @@ async def monito_p_m_s(event):  # sourcery no-metrics
                     LOG_CHATS_.COUNT = 0
                 
                 original_message = f"الرسالة الاصلية: {event.message.text}" if isinstance(event.message, Message) else "الرسالة الاصلية: N/A"
-                edited_message = f"الرسالة المعدلة: {event.message.text}" if event.message.edited_date else "الرسالة المعدلة: N/A"
+                edited_message = f"الرسالة المعدلة: {event.message.text}" if event.message.edit_date else "الرسالة المعدلة: N/A"
                 
                 LOG_CHATS_.NEWPM = await event.client.send_message(
                     Config.PM_LOGGER_GROUP_ID,
