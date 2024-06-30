@@ -19,8 +19,7 @@ ROZTEXT = "عـذرا لا يمكـنك اضافـة رد هـنا"
 async def filter_incoming_handler(handler):
     if handler.sender_id == handler.client.uid:
         return
-    
-    name = handler.raw_text
+    name = handler.raw_text.strip()
     filters = get_filters(handler.chat_id)
     if not filters:
         return
@@ -43,8 +42,7 @@ async def filter_incoming_handler(handler):
     my_username = f"@{me.username}" if me.username else my_mention
     
     for trigger in filters:
-        pattern = r"( |^|[^\w])" + re.escape(trigger.keyword) + r"( |$|[^\w])"
-        if re.search(pattern, name, flags=re.IGNORECASE):
+        if name.lower() == trigger.keyword.lower():
             if trigger.f_mesg_id:
                 msg_o = await handler.client.get_messages(
                     entity=BOTLOG_CHATID, ids=int(trigger.f_mesg_id)
@@ -83,6 +81,7 @@ async def filter_incoming_handler(handler):
                         my_mention=my_mention,
                     ),
                 )
+            return
 
 
 @l313l.ar_cmd(
