@@ -65,7 +65,7 @@ async def monito_p_m_s(event):  # sourcery no-metrics
             except Exception as e:
                 LOGS.warn(str(e))
 
-            if event.original_update:
+            if event.original_update and event.message.text != event.original_update.message.text:
                 try:
                     original_message = await event.client.get_messages(event.chat_id, ids=[event.original_update.message.id])
                     original_text = original_message[0].text if original_message else "N/A"
