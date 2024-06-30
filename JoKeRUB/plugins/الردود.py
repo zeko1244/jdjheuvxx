@@ -17,21 +17,16 @@ ROZTEXT = "عـذرا لا يمكـنك اضافـة رد هـنا"
 
 @l313l.ar_cmd(incoming=True)
 async def filter_incoming_handler(handler):
-    start_time = time.time()
     if handler.sender_id == handler.client.uid:
         return
-    
     name = handler.raw_text.strip()
-    
     filters = get_filters(handler.chat_id)
     if not filters:
         return
-    
     a_user = await handler.get_sender()
     chat = await handler.get_chat()
     me = await handler.client.get_me()
     title = chat.title or "this chat"
-    
     mention = f"[{a_user.first_name}](tg://user?id={a_user.id})"
     my_mention = f"[{me.first_name}](tg://user?id={me.id})"
     first = a_user.first_name
@@ -43,7 +38,6 @@ async def filter_incoming_handler(handler):
     my_last = me.last_name
     my_fullname = f"{my_first} {my_last}" if my_last else my_first
     my_username = f"@{me.username}" if me.username else my_mention
-    
     for trigger in filters:
         if name.lower() == trigger.keyword.lower():
             if trigger.f_mesg_id:
@@ -86,9 +80,6 @@ async def filter_incoming_handler(handler):
                 )
             
             return
-    
-    end_time = time.time()
-    print(f"Total time taken: {end_time - start_time} seconds")
 
 
 @l313l.ar_cmd(
