@@ -38,38 +38,44 @@ async def monito_p_m_s(event):  # sourcery no-metrics
             if LOG_CHATS_.RECENT_USER != chat.id:
                 LOG_CHATS_.RECENT_USER = chat.id
                 if LOG_CHATS_.NEWPM:
-                    if LOG_CHATS_.COUNT > 1:
-                        new_text = LOG_CHATS_.NEWPM.text.replace(" **📮┊رسـاله جـديده**", f"{LOG_CHATS_.COUNT} **رسـائل**")
+                    new_text = LOG_CHATS_.NEWPM.text.replace(
+                        " **📮┊رسـاله جـديده**", f"{LOG_CHATS_.COUNT} **رسـائل**"
+                    )
+                    if LOG_CHATS_.COUNT > 1 and LOG_CHATS_.NEWPM.text != new_text:
                         try:
-                            await event.client.send_message(
-                                Config.PM_LOGGER_GROUP_ID,
-                                f"{new_text}\n\nقام بتعديل الرسالة الأصلية = {LOG_CHATS_.NEWPM.text}"
-                            )
-                            LOGS.info("Message edited and sent successfully.")
+                            await LOG_CHATS_.NEWPM.edit(new_text)
                         except MessageNotModifiedError:
-                            LOGS.warn("Message not modified.")
+                            pass
                     else:
-                        new_text = LOG_CHATS_.NEWPM.text.replace(" **📮┊رسـاله جـديده**", f"{LOG_CHATS_.COUNT} **رسـائل**")
                         await event.client.send_message(
                             Config.PM_LOGGER_GROUP_ID,
-                            f"{new_text}\n\nقام بتعديل الرسالة الأصلية = {LOG_CHATS_.NEWPM.text}"
+                            new_text
                         )
-                        LOGS.info("Single message sent successfully.")
                     LOG_CHATS_.COUNT = 0
                 LOG_CHATS_.NEWPM = await event.client.send_message(
                     Config.PM_LOGGER_GROUP_ID,
                     f"**🛂┊المسـتخـدم :** {_format.mentionuser(sender.first_name , sender.id)} **- قام بـ إرسـال رسـالة جـديـده** \n**🎟┊الايـدي :** `{chat.id}`",
                 )
-                LOGS.info("New PM message created.")
             try:
                 if event.message:
                     await event.client.forward_messages(
                         Config.PM_LOGGER_GROUP_ID, event.message, silent=True
                     )
-                    LOGS.info("Message forwarded successfully.")
                 LOG_CHATS_.COUNT += 1
             except Exception as e:
                 LOGS.warn(str(e))
+
+            if event.is_edit:
+                try:
+                    original_message = event.message
+                    original_text = original_message.text
+                    new_text = f"لقد قام بتعديل الرسالة\nالرسالة الاصلية: {original_text}\nالرسالة المعدلة: {event.message.text}"
+                    await event.client.send_message(
+                        Config.PM_LOGGER_GROUP_ID,
+                        new_text
+                    )
+                except Exception as e:
+                    LOGS.warn(str(e))
 
 @l313l.ar_cmd(incoming=True, func=lambda e: e.mentioned, edited=False, forword=None)
 async def log_tagged_messages(event):
