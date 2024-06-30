@@ -16,7 +16,7 @@ ROZTEXT = "عـذرا لا يمكـنك اضافـة رد هـنا"
 
 
 @l313l.ar_cmd(incoming=True)
-async def filter_incoming_handler(handler):  # sourcery no-metrics
+async def filter_incoming_handler(handler):
     if handler.sender_id == handler.client.uid:
         return
     
@@ -94,14 +94,13 @@ async def filter_incoming_handler(handler):  # sourcery no-metrics
         "option": {
             "{mention}": "To mention the user",
             "{title}": "To get chat name in message",
-            "{count}": "To get group members",
             "{first}": "To use user first name",
             "{last}": "To use user last name",
             "{fullname}": "To use user full name",
             "{userid}": "To use userid",
             "{username}": "To use user username",
             "{my_first}": "To use my first name",
-"{my_fullname}": "To use my full name",
+            "{my_fullname}": "To use my full name",
             "{my_last}": "To use my last name",
             "{my_mention}": "To mention myself",
             "{my_username}": "To use my username.",
@@ -148,7 +147,6 @@ async def add_new_filter(new_handler):
     if add_filter(str(new_handler.chat_id), keyword, string, msg_id) is True:
         return await edit_or_reply(new_handler, success.format(keyword, "Updated"))
     await edit_or_reply(new_handler, f"Error while setting filter for {keyword}")
-
 
 @l313l.ar_cmd(
     pattern="الردود$",
