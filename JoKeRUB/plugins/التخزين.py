@@ -16,15 +16,14 @@ LOGS = logging.getLogger(__name__)
 plugin_category = "البوت"
 
 
+
 class LOG_CHATS:
     def __init__(self):
         self.RECENT_USER = None
         self.NEWPM = None
         self.COUNT = 0
 
-
 LOG_CHATS_ = LOG_CHATS()
-
 
 @l313l.ar_cmd(incoming=True, func=lambda e: e.is_private, edited=False, forword=None)
 async def monito_p_m_s(event):  # sourcery no-metrics
@@ -39,10 +38,8 @@ async def monito_p_m_s(event):  # sourcery no-metrics
             if LOG_CHATS_.RECENT_USER != chat.id:
                 LOG_CHATS_.RECENT_USER = chat.id
                 if LOG_CHATS_.NEWPM:
-                    new_text = LOG_CHATS_.NEWPM.text.replace(
-                        " **📮┊رسـاله جـديده**", f"{LOG_CHATS_.COUNT} **رسـائل**"
-                    )
                     if LOG_CHATS_.COUNT > 1:
+                        new_text = LOG_CHATS_.NEWPM.text.replace(" **📮┊رسـاله جـديده**", f"{LOG_CHATS_.COUNT} **رسـائل**")
                         try:
                             await event.client.send_message(
                                 Config.PM_LOGGER_GROUP_ID,
@@ -52,6 +49,7 @@ async def monito_p_m_s(event):  # sourcery no-metrics
                         except MessageNotModifiedError:
                             LOGS.warn("Message not modified.")
                     else:
+                        new_text = LOG_CHATS_.NEWPM.text.replace(" **📮┊رسـاله جـديده**", f"{LOG_CHATS_.COUNT} **رسـائل**")
                         await event.client.send_message(
                             Config.PM_LOGGER_GROUP_ID,
                             f"{new_text}\n\nقام بتعديل الرسالة الأصلية = {LOG_CHATS_.NEWPM.text}"
