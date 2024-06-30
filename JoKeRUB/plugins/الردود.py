@@ -1,5 +1,5 @@
 import re
-
+import asyncio
 from JoKeRUB import l313l
 
 from ..core.managers import edit_or_reply
@@ -16,6 +16,8 @@ ROZTEXT = "عـذرا لا يمكـنك اضافـة رد هـنا"
 
 
 @l313l.ar_cmd(incoming=True)
+
+@l313l.ar_cmd(incoming=True)
 async def filter_incoming_handler(handler):  # sourcery no-metrics
     if handler.sender_id == handler.client.uid:
         return
@@ -27,7 +29,20 @@ async def filter_incoming_handler(handler):  # sourcery no-metrics
     chat = await handler.get_chat()
     me = await handler.client.get_me()
     title = chat.title or "this chat"
-    participants = await handler.client.get_participants(chat)
+    
+    retries = 6
+    delay = 5  # زمن الانتظار بين المحاولات
+
+    for attempt in range(retries):
+        try:
+            participants = await handler.client.get_participants(chat)
+            break
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+            await asyncio.sleep(delay)
+    else:
+        raise ValueError(f"Request was unsuccessful {retries} time(s)")
+
     count = len(participants)
     mention = f"[{a_user.first_name}](tg://user?id={a_user.id})"
     my_mention = f"[{me.first_name}](tg://user?id={me.id})"
@@ -40,6 +55,7 @@ async def filter_incoming_handler(handler):  # sourcery no-metrics
     my_last = me.last_name
     my_fullname = f"{my_first} {my_last}" if my_last else my_first
     my_username = f"@{me.username}" if me.username else my_mention
+    
     for trigger in filters:
         pattern = r"( |^|[^\w])" + re.escape(trigger.keyword) + r"( |$|[^\w])"
         if re.search(pattern, name, flags=re.IGNORECASE):
