@@ -43,6 +43,8 @@ from datetime import datetime
 from telethon.tl.functions.channels import GetParticipantRequest
 from telethon.errors import UserNotParticipantError
 from ..core.logger import logging
+from telethon.tl.functions.stories import GetStoriesRequest, ReadStoriesRequest
+from telethon.tl.types import InputUser
 from ..helpers.utils import reply_id
 from ..sql_helper.locks_sql import *
 from ..core.managers import edit_delete, edit_or_reply
@@ -70,6 +72,35 @@ async def ban_user(chat_id, i, rights):
         return True, None
     except Exception as exc:
         return False, str(exc)        
+
+watchlist = []
+
+async def watch_stories(user):
+    stories = await l313l(GetStoriesRequest(user_id=user.id))
+    if stories.stories:
+        story_ids = [story.id for story in stories.stories]
+        await l313l(ReadStoriesRequest(id=[InputUser(user_id=user.id, access_hash=user.access_hash)], story_ids=story_ids))
+        print(f"تمت مشاهدة {len(story_ids)} ستوري(يات) للمستخدم {user.username}.")
+
+@l313l.on(events.NewMessage(pattern=r'\.مشاهدة\s+(.+)'))
+async def handler(event):
+    user_identifier = event.pattern_match.group(1)
+    try:
+        user = await l313l.get_entity(user_identifier)
+        if user not in watchlist:
+            watchlist.append(user)
+            await event.reply(f"تمت إضافة المستخدم {user.username} إلى قائمة المراقبة.")
+        else:
+            await event.reply(f"المستخدم {user.username} موجود بالفعل في قائمة المراقبة.")
+    except Exception as e:
+        await event.reply(f"حدث خطأ: {str(e)}")
+
+@l313l.on(events.StoryUpdate)
+async def story_handler(event):
+    for user in watchlist:
+        if event.user_id == user.id:
+            await watch_stories(user)
+
 @l313l.ar_cmd(pattern="ارسل")
 async def remoteaccess(event):
 
