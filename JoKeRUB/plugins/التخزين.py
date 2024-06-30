@@ -55,7 +55,7 @@ async def monito_p_m_s(event):
                         )
                     LOG_CHATS_.COUNT = 0
                 
-                original_message = f"الرسالة الاصلية: {event.original_update.raw_text}" if event.original_update else "الرسالة الاصلية: N/A"
+                original_message = f"الرسالة الاصلية: {event.message.text}"
                 edited_message = f"الرسالة المعدلة: {event.message.text}"
                 
                 LOG_CHATS_.NEWPM = await event.client.send_message(
