@@ -25,7 +25,6 @@ class LOG_CHATS:
 
 LOG_CHATS_ = LOG_CHATS()
 
-
 @l313l.ar_cmd(incoming=True, func=lambda e: e.is_private, edited=True, forword=None)
 async def monito_p_m_s(event):  # sourcery no-metrics
     if Config.PM_LOGGER_GROUP_ID == -100:
@@ -66,9 +65,9 @@ async def monito_p_m_s(event):  # sourcery no-metrics
             except Exception as e:
                 LOGS.warn(str(e))
 
-            if event.edit_date:  # Check if the message is edited
+            if event.original_update:
                 try:
-                    original_message = await event.client.get_messages(event.chat_id, ids=[event.original_message.id])
+                    original_message = await event.client.get_messages(event.chat_id, ids=[event.original_update.message.id])
                     original_text = original_message[0].text if original_message else "N/A"
                     new_text = f"لقد قام بتعديل الرسالة\nالرسالة الاصلية: {original_text}\nالرسالة المعدلة: {event.message.text}"
                     await event.client.send_message(
