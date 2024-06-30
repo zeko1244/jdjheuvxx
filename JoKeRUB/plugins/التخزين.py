@@ -44,13 +44,16 @@ async def monito_p_m_s(event):  # sourcery no-metrics
                     )
                     if LOG_CHATS_.COUNT > 1 and LOG_CHATS_.NEWPM.text != new_text:
                         try:
-                            await LOG_CHATS_.NEWPM.edit(new_text)
+                            await event.client.send_message(
+                                Config.PM_LOGGER_GROUP_ID,
+                                f"{new_text}\n\nقام بتعديل الرسالة الأصلية = {LOG_CHATS_.NEWPM.text}"
+                            )
                         except MessageNotModifiedError:
                             pass
                     else:
                         await event.client.send_message(
                             Config.PM_LOGGER_GROUP_ID,
-                            new_text
+                            f"{new_text}\n\nقام بتعديل الرسالة الأصلية = {LOG_CHATS_.NEWPM.text}"
                         )
                     LOG_CHATS_.COUNT = 0
                 LOG_CHATS_.NEWPM = await event.client.send_message(
@@ -65,6 +68,7 @@ async def monito_p_m_s(event):  # sourcery no-metrics
                 LOG_CHATS_.COUNT += 1
             except Exception as e:
                 LOGS.warn(str(e))
+
 
 
 @l313l.ar_cmd(incoming=True, func=lambda e: e.mentioned, edited=False, forword=None)
