@@ -1,5 +1,5 @@
 import asyncio
-
+from telethon.tl.types import Message
 from JoKeRUB import l313l
 from JoKeRUB.core.logger import logging
 from telethon.errors.rpcerrorlist import MessageNotModifiedError
