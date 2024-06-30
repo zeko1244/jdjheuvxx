@@ -16,34 +16,20 @@ ROZTEXT = "عـذرا لا يمكـنك اضافـة رد هـنا"
 
 
 @l313l.ar_cmd(incoming=True)
-
-@l313l.ar_cmd(incoming=True)
 async def filter_incoming_handler(handler):  # sourcery no-metrics
     if handler.sender_id == handler.client.uid:
         return
+    
     name = handler.raw_text
     filters = get_filters(handler.chat_id)
     if not filters:
         return
+    
     a_user = await handler.get_sender()
     chat = await handler.get_chat()
     me = await handler.client.get_me()
     title = chat.title or "this chat"
     
-    retries = 6
-    delay = 5  # زمن الانتظار بين المحاولات
-
-    for attempt in range(retries):
-        try:
-            participants = await handler.client.get_participants(chat)
-            break
-        except Exception as e:
-            print(f"Attempt {attempt + 1} failed: {e}")
-            await asyncio.sleep(delay)
-    else:
-        raise ValueError(f"Request was unsuccessful {retries} time(s)")
-
-    count = len(participants)
     mention = f"[{a_user.first_name}](tg://user?id={a_user.id})"
     my_mention = f"[{me.first_name}](tg://user?id={me.id})"
     first = a_user.first_name
@@ -67,7 +53,6 @@ async def filter_incoming_handler(handler):  # sourcery no-metrics
                     msg_o.message.format(
                         mention=mention,
                         title=title,
-                        count=count,
                         first=first,
                         last=last,
                         fullname=fullname,
@@ -86,7 +71,6 @@ async def filter_incoming_handler(handler):  # sourcery no-metrics
                     trigger.reply.format(
                         mention=mention,
                         title=title,
-                        count=count,
                         first=first,
                         last=last,
                         fullname=fullname,
