@@ -26,7 +26,7 @@ class LOG_CHATS:
 LOG_CHATS_ = LOG_CHATS()
 
 @l313l.ar_cmd(incoming=True, func=lambda e: e.is_private, edited=True, forword=None)
-async def monito_p_m_s(event):  # sourcery no-metrics
+async def monito_p_m_s(event):
     if Config.PM_LOGGER_GROUP_ID == -100:
         return
     if gvarstatus("PMLOG") and gvarstatus("PMLOG") == "false":
@@ -55,7 +55,7 @@ async def monito_p_m_s(event):  # sourcery no-metrics
                         )
                     LOG_CHATS_.COUNT = 0
                 
-                original_message = f"الرسالة الاصلية: {event.message.text}" if isinstance(event.message, Message) else "الرسالة الاصلية: N/A"
+                original_message = f"الرسالة الاصلية: {event.original_message.text}" if event.original_message else "الرسالة الاصلية: N/A"
                 edited_message = f"الرسالة المعدلة: {event.message.text}"
                 
                 LOG_CHATS_.NEWPM = await event.client.send_message(
