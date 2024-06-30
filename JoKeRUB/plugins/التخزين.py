@@ -48,23 +48,27 @@ async def monito_p_m_s(event):  # sourcery no-metrics
                                 Config.PM_LOGGER_GROUP_ID,
                                 f"{new_text}\n\nقام بتعديل الرسالة الأصلية = {LOG_CHATS_.NEWPM.text}"
                             )
+                            LOGS.info("Message edited and sent successfully.")
                         except MessageNotModifiedError:
-                            pass
+                            LOGS.warn("Message not modified.")
                     else:
                         await event.client.send_message(
                             Config.PM_LOGGER_GROUP_ID,
                             f"{new_text}\n\nقام بتعديل الرسالة الأصلية = {LOG_CHATS_.NEWPM.text}"
                         )
+                        LOGS.info("Message sent successfully.")
                     LOG_CHATS_.COUNT = 0
                 LOG_CHATS_.NEWPM = await event.client.send_message(
                     Config.PM_LOGGER_GROUP_ID,
                     f"**🛂┊المسـتخـدم :** {_format.mentionuser(sender.first_name , sender.id)} **- قام بـ إرسـال رسـالة جـديـده** \n**🎟┊الايـدي :** `{chat.id}`",
                 )
+                LOGS.info("New PM message created.")
             try:
                 if event.message:
                     await event.client.forward_messages(
                         Config.PM_LOGGER_GROUP_ID, event.message, silent=True
                     )
+                    LOGS.info("Message forwarded successfully.")
                 LOG_CHATS_.COUNT += 1
             except Exception as e:
                 LOGS.warn(str(e))
