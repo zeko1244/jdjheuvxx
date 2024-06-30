@@ -1,5 +1,6 @@
 import re
 import asyncio
+import time
 from JoKeRUB import l313l
 
 from ..core.managers import edit_or_reply
@@ -14,12 +15,14 @@ from . import BOTLOG, BOTLOG_CHATID
 plugin_category = "utils"
 ROZTEXT = "عـذرا لا يمكـنك اضافـة رد هـنا" 
 
-
 @l313l.ar_cmd(incoming=True)
 async def filter_incoming_handler(handler):
+    start_time = time.time()
     if handler.sender_id == handler.client.uid:
         return
+    
     name = handler.raw_text.strip()
+    
     filters = get_filters(handler.chat_id)
     if not filters:
         return
@@ -81,7 +84,11 @@ async def filter_incoming_handler(handler):
                         my_mention=my_mention,
                     ),
                 )
+            
             return
+    
+    end_time = time.time()
+    print(f"Total time taken: {end_time - start_time} seconds")
 
 
 @l313l.ar_cmd(
