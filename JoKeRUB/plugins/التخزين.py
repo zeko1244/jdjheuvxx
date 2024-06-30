@@ -42,14 +42,21 @@ async def monito_p_m_s(event):  # sourcery no-metrics
                     new_text = LOG_CHATS_.NEWPM.text.replace(
                         " **📮┊رسـاله جـديده**", f"{LOG_CHATS_.COUNT} **رسـائل**"
                     )
-                    try:
+                    if LOG_CHATS_.COUNT > 1:
+                        try:
+                            await event.client.send_message(
+                                Config.PM_LOGGER_GROUP_ID,
+                                f"{new_text}\n\nقام بتعديل الرسالة الأصلية = {LOG_CHATS_.NEWPM.text}"
+                            )
+                            LOGS.info("Message edited and sent successfully.")
+                        except MessageNotModifiedError:
+                            LOGS.warn("Message not modified.")
+                    else:
                         await event.client.send_message(
                             Config.PM_LOGGER_GROUP_ID,
                             f"{new_text}\n\nقام بتعديل الرسالة الأصلية = {LOG_CHATS_.NEWPM.text}"
                         )
-                        LOGS.info("Message edited and sent successfully.")
-                    except MessageNotModifiedError:
-                        LOGS.warn("Message not modified.")
+                        LOGS.info("Single message sent successfully.")
                     LOG_CHATS_.COUNT = 0
                 LOG_CHATS_.NEWPM = await event.client.send_message(
                     Config.PM_LOGGER_GROUP_ID,
@@ -65,8 +72,6 @@ async def monito_p_m_s(event):  # sourcery no-metrics
                 LOG_CHATS_.COUNT += 1
             except Exception as e:
                 LOGS.warn(str(e))
-
-
 
 @l313l.ar_cmd(incoming=True, func=lambda e: e.mentioned, edited=False, forword=None)
 async def log_tagged_messages(event):
