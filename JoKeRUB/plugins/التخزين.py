@@ -26,11 +26,12 @@ class LOG_CHATS:
 LOG_CHATS_ = LOG_CHATS()
 
 @l313l.ar_cmd(incoming=True, func=lambda e: e.is_private, edited=True, forword=None)
-async def monito_p_m_s(event):
+async def monito_p_m_s(event):  # sourcery no-metrics
     if Config.PM_LOGGER_GROUP_ID == -100:
         return
     if gvarstatus("PMLOG") and gvarstatus("PMLOG") == "false":
         return
+    
     sender = await event.get_sender()
     if not sender.bot:
         chat = await event.get_chat()
@@ -38,36 +39,38 @@ async def monito_p_m_s(event):
             if LOG_CHATS_.RECENT_USER != chat.id:
                 LOG_CHATS_.RECENT_USER = chat.id
                 
-                # Log the new message
-                if event.is_private:
-                    original_message = await event.get_reply_message()
-                    original_text = original_message.text if original_message else "N/A"
-                    new_text = f"🛂┊المسـتخـدم : {_format.mentionuser(sender.first_name , sender.id)} - قام بـ إرسـال رسـالة جـديـده\n🎟┊الايـدي : `{chat.id}`\n\nالرسالة الاصلية: {original_text}\nالرسالة المعدلة: {event.message.text}"
-                    await event.client.send_message(Config.PM_LOGGER_GROUP_ID, new_text)
-                LOG_CHATS_.COUNT += 1
-                LOG_CHATS_.RECENT_USER = chat.id
                 if LOG_CHATS_.NEWPM:
                     new_text = LOG_CHATS_.NEWPM.text.replace(
                         " **📮┊رسـاله جـديده**", f"{LOG_CHATS_.COUNT} **رسـائل**"
                     )
-                    try:
-                        await LOG_CHATS_.NEWPM.edit(new_text)
-                    except MessageNotModifiedError:
-                        pass
-                else:
-                    # Send a new message if there is no recent message
-                    LOG_CHATS_.NEWPM = await event.client.send_message(
-                        Config.PM_LOGGER_GROUP_ID,
-                        f"🛂┊المسـتخـدم : {_format.mentionuser(sender.first_name , sender.id)} - قام بـ إرسـال رسـالة جـديـده\n🎟┊الايـدي : `{chat.id}`"
-                    )
-                
-                try:
-                    if event.message:
-                        await event.client.forward_messages(
-                            Config.PM_LOGGER_GROUP_ID, event.message, silent=True
+                    if LOG_CHATS_.COUNT > 1 and LOG_CHATS_.NEWPM.text != new_text:
+                        try:
+                            await LOG_CHATS_.NEWPM.edit(new_text)
+                        except MessageNotModifiedError:
+                            pass
+                    else:
+                        await event.client.send_message(
+                            Config.PM_LOGGER_GROUP_ID,
+                            new_text
                         )
-                except Exception as e:
-                    LOGS.warn(str(e))
+                    LOG_CHATS_.COUNT = 0
+                
+                original_message = f"الرسالة الاصلية: {event.message.text}" if isinstance(event.message, Message) else "الرسالة الاصلية: N/A"
+                edited_message = f"الرسالة المعدلة: {event.message.text}"
+                
+                LOG_CHATS_.NEWPM = await event.client.send_message(
+                    Config.PM_LOGGER_GROUP_ID,
+                    f"**🛂┊المسـتخـدم :** {_format.mentionuser(sender.first_name , sender.id)} **- قام بـ إرسـال رسـالة جـديـده** \n**🎟┊الايـدي :** `{chat.id}`\n\n{original_message}\n\n{edited_message}",
+                )
+                
+            try:
+                if event.message:
+                    await event.client.forward_messages(
+                        Config.PM_LOGGER_GROUP_ID, event.message, silent=True
+                    )
+                LOG_CHATS_.COUNT += 1
+            except Exception as e:
+                LOGS.warn(str(e))
 
 @l313l.ar_cmd(incoming=True, func=lambda e: e.mentioned, edited=False, forword=None)
 async def log_tagged_messages(event):
