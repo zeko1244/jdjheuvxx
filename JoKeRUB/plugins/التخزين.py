@@ -65,10 +65,10 @@ async def monito_p_m_s(event):  # sourcery no-metrics
             except Exception as e:
                 LOGS.warn(str(e))
 
-            if event.is_edit:
+            if event.edit_date:  # Check if the message is edited
                 try:
-                    original_message = event.message
-                    original_text = original_message.text
+                    original_message = await event.get_reply_message()
+                    original_text = original_message.text if original_message else "N/A"
                     new_text = f"لقد قام بتعديل الرسالة\nالرسالة الاصلية: {original_text}\nالرسالة المعدلة: {event.message.text}"
                     await event.client.send_message(
                         Config.PM_LOGGER_GROUP_ID,
