@@ -320,7 +320,6 @@ async def aljoker_allnshr(l313l, sleeptimet, message):
 
 @l313l.ar_cmd(pattern="نشر_كروبات")
 async def Hussein(event):
-    await event.delete()
     seconds = "".join(event.text.split(maxsplit=1)[1:]).split(" ", 2)
     message = await event.get_reply_message()
     try:
