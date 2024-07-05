@@ -311,17 +311,18 @@ async def aljoker_allnshr(l313l, sleeptimet, message):
     aljoker_chats = await l313l.get_dialogs()
     while yaAli:
         for chat in aljoker_chats:
-            if chat.is_group:
-                if message.media:
-                    await l313l.send_file(chat.id, message.media, caption=message.text)
-                else:
+            if chat.is_group and not chat.megagroup:
+                try:
                     await l313l.send_message(chat.id, message.text)
+                except Exception as e:
+                    print(f"Failed to send message to group {chat.title}: {str(e)}")
         await asyncio.sleep(sleeptimet)
+
 @l313l.ar_cmd(pattern="نشر_كروبات")
 async def Hussein(event):
     await event.delete()
     seconds = "".join(event.text.split(maxsplit=1)[1:]).split(" ", 2)
-    message =  await event.get_reply_message()
+    message = await event.get_reply_message()
     try:
         sleeptimet = int(seconds[0])
     except Exception:
