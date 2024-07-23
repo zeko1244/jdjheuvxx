@@ -61,8 +61,10 @@ async def rfilm(event):
 
     await event.delete()
     try:
-        await l313l.tgbot.send_message(
-            event.chat_id,
+        await l313l.send_message(event.chat_id, f"{event.chat_id}")
+        #await l313l.tgbot.send_message(
+            #event.chat_id,
+        await event.edit(
             moviet,
             buttons=buttons,
             file=moviep,
@@ -70,8 +72,9 @@ async def rfilm(event):
             link_preview=False,
         )
     except ValueError:
-        await l313l.send_message(
-            event.chat_id,
+        #await l313l.send_message(
+            #event.chat_id,
+        await event.edit(
             moviet,
             file=moviep,
             force_document=False,
