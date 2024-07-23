@@ -59,7 +59,7 @@ async def rfilm(event):
             
             buttons.append(x)
 
-    await event.delete()
+    #await event.delete()
     try:
         await l313l.send_message(event.chat_id, f"{event.chat_id}")
         #await l313l.tgbot.send_message(
