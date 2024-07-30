@@ -22,16 +22,6 @@ from . import mention
 
 plugin_category = "utils"
 
-@l313l.on(events.NewMessage(pattern=r'\.event', outgoing=True))
-async def my_event_handler(event):
-    if event.is_reply:
-        replied_message = await event.get_reply_message()
-        if replied_message:
-            event_info = await client.get_event_info(replied_message)
-            with open("event_info.txt", "w") as file:
-                file.write(event_info.stringify())
-            await l313l.send_file(event.chat_id, "event_info.txt")
-
 @l313l.ar_cmd(
     pattern="المطور$",
     command=("المطور", plugin_category),
@@ -49,7 +39,7 @@ async def amireallyalive(event):
     _, check_sgnirts = check_data_base_heal_th()
     EMOJI = gvarstatus("ALIVE_EMOJI") or "  - "
     CUSTOM_ALIVE_TEXT = gvarstatus("ALIVE_TEXT")
-    CAT_IMG = "https://images.squarespace-cdn.com/content/v1/561b8ec9e4b0fcd88caa0732/1614152685578-J3H29R1XVTI8FN2TF5WW/REDA.jpg"
+    CAT_IMG = "https://telegra.ph/file/bd533dbae347f83a37f82.jpg"
     if CAT_IMG:
         CAT = [x for x in CAT_IMG.split()]
         A_IMG = list(CAT)
@@ -57,7 +47,6 @@ async def amireallyalive(event):
         cat_caption = f"مطورين الجوكر\n"
         cat_caption += f"✛━━━━━━━━━━━━━✛\n"
         cat_caption += f"- المطور  : @lMl10l\n"
-        cat_caption += f"- المطور  : @ri2da\n"
         cat_caption += f"✛━━━━━━━━━━━━━✛\n"
         await event.client.send_file(
             event.chat_id, PIC, caption=cat_caption, reply_to=reply_to_id
