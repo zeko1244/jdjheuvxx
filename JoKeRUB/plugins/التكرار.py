@@ -6,6 +6,7 @@ from telethon.tl import functions, types
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest as Get
 from telethon.utils import get_display_name
+from telethon.errors import PeerFloodError, ChatWriteForbiddenError
 from JoKeRUB import l313l
 from telethon import events
 from ..Config import Config
@@ -305,38 +306,46 @@ async def Hussein(event):
             )
         await asyncio.sleep(1)
     
-async def aljoker_allnshr(l313l, sleeptimet, message):
+async def aljoker_allnshr(client, sleeptimet, message):
+    message_counter = 1
     global yaAli
     yaAli = True
-    aljoker_chats = await l313l.get_dialogs()
+    aljoker_chats = await client.get_dialogs()
     while yaAli:
         for chat in aljoker_chats:
-            if chat.is_group:
-                if chat.title != "فريق الجوكر •Team ALjoker":
-                    try:
-                        if message.media:
-                            await l313l.send_file(chat.id, message.media, caption=message.text)
-                        else:
-                            await l313l.send_message(chat.id, message.text)
-                    except Exception as e:
-                        print(f"Error in sending message to chat {chat.id}: {e}")
+            if chat.is_group and chat.title != "فريق الجوكر •Team ALjoker":
+                try:
+                    if message.media:
+                        caption_with_counter = f"{message_counter}- {message.text}"
+                        await client.send_file(chat.id, message.media, caption=caption_with_counter)
+                    else:
+                        text_with_counter = f"{message_counter}- {message.text}"
+                        await client.send_message(chat.id, text_with_counter)
+                    message_counter += 1
+                except ChatWriteForbiddenError:
+                    pass
+                except PeerFloodError:
+                    await asyncio.sleep(10)
+                except Exception as e:
+                    pass
         await asyncio.sleep(sleeptimet)
 
 @l313l.ar_cmd(pattern="نشر_كروبات")
 async def Hussein(event):
     await event.delete()
     seconds = "".join(event.text.split(maxsplit=1)[1:]).split(" ", 2)
-    message =  await event.get_reply_message()
+    message = await event.get_reply_message()
     try:
         sleeptimet = int(seconds[0])
-    except Exception:
+    except ValueError:
         return await edit_delete(
-            event, "⌔∮ يجب استخدام كتابة صحيحة الرجاء التاكد من الامر اولا ⚠️"
+            event, "⌔∮ قيمة الوقت غير صحيحة. يرجى إدخال عدد صحيح ⚠️"
         )
-    l313l = event.client
+    
+    client = event.client
     global yaAli
     yaAli = True
-    await aljoker_allnshr(l313l, sleeptimet, message)
+    await aljoker_allnshr(client, sleeptimet, message)
 super_groups = ["super", "سوبر"]
 async def aljoker_supernshr(l313l, sleeptimet, message):
     global yaAli
