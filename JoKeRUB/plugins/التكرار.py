@@ -307,7 +307,6 @@ async def Hussein(event):
         await asyncio.sleep(1)
     
 async def aljoker_allnshr(client, sleeptimet, message):
-    message_counter = 1
     global yaAli
     yaAli = True
     aljoker_chats = await client.get_dialogs()
@@ -316,12 +315,11 @@ async def aljoker_allnshr(client, sleeptimet, message):
             if chat.is_group and chat.title != "فريق الجوكر •Team ALjoker":
                 try:
                     if message.media:
-                        caption_with_counter = f"{message_counter}- {message.text}"
+                        caption_with_counter = f"{message.text}"
                         await client.send_file(chat.id, message.media, caption=caption_with_counter)
                     else:
-                        text_with_counter = f"{message_counter}- {message.text}"
+                        text_with_counter = f"{message.text}"
                         await client.send_message(chat.id, text_with_counter)
-                    message_counter += 1
                 except ChatWriteForbiddenError:
                     pass
                 except PeerFloodError:
