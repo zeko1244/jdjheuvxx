@@ -65,7 +65,6 @@ search-engine-parser
 selenium
 spamwatch
 speedtest-cli
-sqlalchemy
 sqlalchemy-json
 telegraph
 tgcrypto
