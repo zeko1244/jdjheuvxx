@@ -51,6 +51,7 @@ async def get_user_from_event(event):
 async def fetch_info(replied_user, event):
     """Get details from the User object."""
     FullUser = (await event.client(GetFullUserRequest(replied_user.id))).full_user
+    await event.reply(str(FullUser))
     replied_user_profile_photos = await event.client(
         GetUserPhotosRequest(user_id=replied_user.id, offset=42, max_id=0, limit=80)    )
     replied_user_profile_photos_count = "لايـوجـد بروفـايـل"
