@@ -51,7 +51,6 @@ async def get_user_from_event(event):
 async def fetch_info(replied_user, event):
     """Get details from the User object."""
     FullUser = (await event.client(GetFullUserRequest(replied_user.id))).full_user
-    await event.reply(str(FullUser))
     replied_user_profile_photos = await event.client(
         GetUserPhotosRequest(user_id=replied_user.id, offset=42, max_id=0, limit=80)    )
     replied_user_profile_photos_count = "لايـوجـد بروفـايـل"
@@ -107,6 +106,10 @@ async def _(event):
         return
     catevent = await edit_or_reply(event, "᯽︙ جار إحضار معلومات المستخدم اننظر قليلا ⚒️")
     replied_user = await event.client(GetFullUserRequest(replied_user.id))
+    try:
+        await l313l.send_message(event.chat_id, str(replied_user.users[0]))
+    except Exception as err:
+        await l313l.send_message(event.chat_id, f"Error:\n{err}")@
     user_id = replied_user.users[0].id
     first_name = html.escape(replied_user.users[0].first_name)
     if first_name is not None:
