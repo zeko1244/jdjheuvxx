@@ -12,17 +12,26 @@ from telethon.errors.rpcerrorlist import ChannelPrivateError
 from telethon.tl.custom import Message
 from ..Config import Config
 from telethon.errors import (
+    UserNotParticipantError,
     ChatAdminRequiredError,
     FloodWaitError,
     MessageNotModifiedError,
     UserAdminInvalidError,
+    InputUserDeactivatedError,
+    ChatMemberAddFailedError,
+    UserBlockedError,
+    UserBotError,
+    UserChannelsTooMuchError,
+    UserKickedError,
+    UserPrivacyRestrictedError,
+    UserNotMutualContactError
 )
-
+stop_addCon = False
 from telethon.tl.functions.messages import DeleteHistoryRequest
 from telethon.tl.functions.contacts import GetContactsRequest
 from telethon.tl.functions.channels import EditBannedRequest, LeaveChannelRequest
 from telethon.tl.functions.channels import EditAdminRequest
-from telethon import events, errors, functions
+from telethon import events, functions, errors
 from telethon.tl.types import (
     ChannelParticipantsAdmins,
     ChannelParticipantCreator,
@@ -41,7 +50,6 @@ from JoKeRUB import l313l
 from ..sql_helper.globals import addgvar, delgvar, gvarstatus
 from datetime import datetime
 from telethon.tl.functions.channels import GetParticipantRequest
-from telethon.errors import UserNotParticipantError
 from ..core.logger import logging
 from telethon.tl.types import InputUser
 from ..helpers.utils import reply_id
@@ -75,38 +83,61 @@ async def ban_user(chat_id, i, rights):
 #Reda
 @l313l.ar_cmd(pattern="(اضف جهاتي|اضف جهتي)")
 async def reda_add_con(event):
+    global stop_addCon
     await event.delete()
+    
     Redaresult = await event.client(functions.channels.GetParticipantRequest(
-    event.chat_id, (await event.client.get_me()).id
+        event.chat_id, (await event.client.get_me()).id
     ))
 
     if not Redaresult.participant.admin_rights.invite_users:
         return await event.respond(
             "᯽︙ - يبدو انه ليس لديك صلاحيات لإضافة الاعضاء للدردشة"
         )
+
     count = 0
     try:
         contacts_result = await event.client(functions.contacts.GetContactsRequest(hash=0))
+        
         for u in contacts_result.users:
+            if stop_addCon:
+                break
             try:
-                await event.client(functions.channels.InviteToChannelRequest(
-                    channel=event.chat_id,
-                    users=[u]
-                ))
+                try:
+                    await event.client(functions.channels.InviteToChannelRequest(
+                        channel=event.chat_id,
+                        users=[u]
+                    ))
+                except errors.FloodWaitError as e:
+                    await asyncio.sleep(e.seconds)
+                    await event.client(functions.channels.InviteToChannelRequest(
+                        channel=event.chat_id,
+                        users=[u]
+                    ))
+                
                 count += 1
                 await asyncio.sleep(2)
-            except (errors.UserChannelsTooMuchError, 
-                    errors.UserPrivacyRestrictedError, 
-                    errors.InputUserDeactivatedError, 
-                    errors.UserBlockedError, 
-                    errors.UserKickedError):
+            except (UserChannelsTooMuchError, 
+                    UserPrivacyRestrictedError, 
+                    InputUserDeactivatedError, 
+                    UserBlockedError, 
+                    UserKickedError,
+                    UserNotParticipantError,
+                    UserNotMutualContactError,
+                    ChatMemberAddFailedError) as e:
+                
                 continue
-            except Exception as err:
-                await event.client.send_message(event.chat_id, f"Error:\n{err}")
 
     except errors.FloodWaitError as e:
         await asyncio.sleep(e.seconds)
+
     await event.client.send_message(event.chat_id, f"تم اضافة {count} للكروب.")
+
+@l313l.ar_cmd(pattern="(ايقاف الاضافة|ايقاف|ايقاف الاضافه)")
+async def stop_add_con(event):
+    global stop_addCon
+    stop_addCon = True
+
 
 @l313l.ar_cmd(pattern="ارسل")
 async def remoteaccess(event):
