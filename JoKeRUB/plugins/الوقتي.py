@@ -16,7 +16,7 @@ from telethon import events
 from telethon.errors import ChatAdminRequiredError
 from PIL import Image, ImageDraw, ImageFont
 from pySmartDL import SmartDL
-from telethon.errors import FloodWaitError, ChannelInvalidError
+from telethon.errors import FloodWaitError, ChannelInvalidError, ChatNotModifiedError
 from telethon.tl import functions
 from telethon import types
 from JoKeRUB import BOTLOG_CHATID
@@ -191,6 +191,8 @@ async def group_loop():
             await l313l.tgbot.send_message(BOTLOG_CHATID, "**يجب ان يكون لديك صلاحية تغيير اسم الكروب لتفعيل وقتي الكروب•**")
         except ChannelInvalidError:
             return
+        except ChatNotModifiedError:
+            pass
         except FloodWaitError:
             LOGS.warning("FloodWaitError! خطأ حظر مؤقت من التيليجرام")
         await asyncio.sleep(Config.CHANGE_TIME)
