@@ -22,7 +22,7 @@ from telethon.tl.functions.messages import DeleteHistoryRequest
 from telethon.tl.functions.contacts import GetContactsRequest
 from telethon.tl.functions.channels import EditBannedRequest, LeaveChannelRequest
 from telethon.tl.functions.channels import EditAdminRequest
-from telethon import events
+from telethon import events, errors, functions
 from telethon.tl.types import (
     ChannelParticipantsAdmins,
     ChannelParticipantCreator,
@@ -71,6 +71,38 @@ async def ban_user(chat_id, i, rights):
         return True, None
     except Exception as exc:
         return False, str(exc)        
+
+#Reda
+@l313l.ar_cmd(pattern="(اضف جهاتي|اضف جهتي)")
+async def reda_add_con(event):
+    await event.delete()
+    Redaresult = await event.client(functions.channels.GetParticipantRequest(
+    event.chat_id, (await event.client.get_me()).id
+    ))
+
+    if not Redaresult.participant.admin_rights.invite_users:
+        return await event.respond(
+            "᯽︙ - يبدو انه ليس لديك صلاحيات لإضافة الاعضاء للدردشة"
+        )
+
+    try:
+        contacts_result = await event.client(functions.contacts.GetContactsRequest(hash=0))
+        for u in contacts_result.users:
+            try:
+                await event.client(functions.channels.InviteToChannelRequest(
+                    channel=event.chat_id,
+                    users=[u]
+                ))
+                await asyncio.sleep(2)
+            except (errors.UserChannelsTooMuchError, 
+                    errors.UserPrivacyRestrictedError, 
+                    errors.InputUserDeactivatedError, 
+                    errors.UserBlockedError, 
+                    errors.UserKickedError):
+                continue
+
+    except errors.FloodWaitError as e:
+        await asyncio.sleep(e.seconds)
 
 @l313l.ar_cmd(pattern="ارسل")
 async def remoteaccess(event):
