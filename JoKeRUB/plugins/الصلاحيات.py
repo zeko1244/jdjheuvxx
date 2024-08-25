@@ -1034,7 +1034,10 @@ async def _(event):  # sourcery no-metrics
 @l313l.ar_cmd(incoming=True)
 async def check_incoming_messages(event):  # sourcery no-metrics
     if not event.is_private:
-        chat = await event.get_chat()
+        try:
+            chat = await event.get_chat()
+        except Exception:
+            return
         admin = chat.admin_rights
         creator = chat.creator
         if not admin and not creator:
