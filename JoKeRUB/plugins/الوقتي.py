@@ -178,6 +178,7 @@ async def group_loop():
         HM = datetime.now(joker_timezone).strftime("%I:%M")
         for normal in HM:
             if normal in normzltext:
+                namerzfont = gvarstatus("JP_FN") or "𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗𝟎"
                 namefont = namerzfont[normzltext.index(normal)]
                 HM = HM.replace(normal, namefont)
         name = f"{DEFAULTUSERGRO} {HM}"
