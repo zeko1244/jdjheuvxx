@@ -18,7 +18,6 @@ from telethon.errors import (
     MessageNotModifiedError,
     UserAdminInvalidError,
     InputUserDeactivatedError,
-    ChatMemberAddFailedError,
     UserBlockedError,
     UserBotError,
     UserChannelsTooMuchError,
@@ -127,10 +126,13 @@ async def reda_add_con(event):
                     ChatMemberAddFailedError) as e:
                 
                 continue
+            except Exception:
+                continue
 
     except errors.FloodWaitError as e:
         await asyncio.sleep(e.seconds)
-
+    except Exception:
+        continue
     await event.client.send_message(event.chat_id, f"تم اضافة {count} للكروب.")
 
 @l313l.ar_cmd(pattern="(ايقاف الاضافة|ايقاف|ايقاف الاضافه)")
