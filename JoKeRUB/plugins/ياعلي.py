@@ -7,6 +7,7 @@ from telethon.tl import types
 from ..Config import Config
 import requests
 from telethon import Button, events
+from telethon.errors import ChannelPrivateError
 from telethon.tl.functions.messages import ExportChatInviteRequest
 from ..core.managers import edit_delete, edit_or_reply
 #ياعلي
@@ -107,7 +108,10 @@ async def reda (event):
 
 @l313l.ar_cmd(incoming=True)
 async def reda(event):
-    sender = await event.get_sender()
+    try:
+        sender = await event.get_sender()
+    except ChannelPrivateError:
+        return
     if isinstance(sender, types.User) and (sender.bot or sender.id in {705475246, 777000}):
         return
     if gvarstatus("subprivate"):
