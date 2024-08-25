@@ -40,13 +40,16 @@ async def custom_HuRe(event):
     reply = await event.get_reply_message()
     text = None
     var = None
+    input_str = event.pattern_match.group(1)
+    dontDo = ["جهاتي", "جهتي"]
+    if input_str in dontDo:
+        return
     if reply:
         text = reply.text
     if text is None:
         return await edit_delete(
             event, "**⌔∮ يجب عليك الرد على النص او الرابط حسب الفار الذي تضيفه **"
         )
-    input_str = event.pattern_match.group(1)
     if (
         input_str == "كليشة الحماية"
         or input_str == "كليشة الحمايه"
