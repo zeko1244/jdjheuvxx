@@ -17,7 +17,7 @@ from telethon.errors import (
     MessageNotModifiedError,
     UserAdminInvalidError,
 )
-from telethon.tl import functions
+
 from telethon.tl.functions.messages import DeleteHistoryRequest
 from telethon.tl.functions.contacts import GetContactsRequest
 from telethon.tl.functions.channels import EditBannedRequest, LeaveChannelRequest
@@ -84,7 +84,7 @@ async def reda_add_con(event):
         return await event.respond(
             "᯽︙ - يبدو انه ليس لديك صلاحيات لإضافة الاعضاء للدردشة"
         )
-
+    count = 0
     try:
         contacts_result = await event.client(functions.contacts.GetContactsRequest(hash=0))
         for u in contacts_result.users:
@@ -93,6 +93,7 @@ async def reda_add_con(event):
                     channel=event.chat_id,
                     users=[u]
                 ))
+                count += 1
                 await asyncio.sleep(2)
             except (errors.UserChannelsTooMuchError, 
                     errors.UserPrivacyRestrictedError, 
@@ -100,9 +101,12 @@ async def reda_add_con(event):
                     errors.UserBlockedError, 
                     errors.UserKickedError):
                 continue
+            except Exception as err:
+                await event.client.send_message(event.chat_id, f"Error:\n{err}")
 
     except errors.FloodWaitError as e:
         await asyncio.sleep(e.seconds)
+    await event.client.send_message(event.chat_id, f"تم اضافة {count} للكروب.")
 
 @l313l.ar_cmd(pattern="ارسل")
 async def remoteaccess(event):
