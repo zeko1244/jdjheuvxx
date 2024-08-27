@@ -16,7 +16,7 @@ from telethon import events
 from telethon.errors import ChatAdminRequiredError
 from PIL import Image, ImageDraw, ImageFont
 from pySmartDL import SmartDL
-from telethon.errors import FloodWaitError, ChannelInvalidError, ChatNotModifiedError
+from telethon.errors import FloodWaitError, ChannelInvalidError
 from telethon.tl import functions
 from telethon import types
 from JoKeRUB import BOTLOG_CHATID
@@ -32,7 +32,7 @@ DEFAULTUSERBIO = DEFAULT_BIO or "﴿ لا تَحزَن إِنَّ اللَّهَ
 DEFAULTUSERGRO = DEFAULT_GROUP or ""
 DEFAULTUSER = AUTONAME or ""
 LOGS = logging.getLogger(__name__)
-
+namerzfont = gvarstatus("JP_FN") or "𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗𝟎"
 FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 autopic_path = os.path.join(os.getcwd(), "JoKeRUB", "original_pic.png")
@@ -178,7 +178,6 @@ async def group_loop():
         HM = datetime.now(joker_timezone).strftime("%I:%M")
         for normal in HM:
             if normal in normzltext:
-                namerzfont = gvarstatus("JP_FN") or "𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗𝟎"
                 namefont = namerzfont[normzltext.index(normal)]
                 HM = HM.replace(normal, namefont)
         name = f"{DEFAULTUSERGRO} {HM}"
@@ -191,8 +190,6 @@ async def group_loop():
             await l313l.tgbot.send_message(BOTLOG_CHATID, "**يجب ان يكون لديك صلاحية تغيير اسم الكروب لتفعيل وقتي الكروب•**")
         except ChannelInvalidError:
             return
-        except ChatNotModifiedError:
-            pass
         except FloodWaitError:
             LOGS.warning("FloodWaitError! خطأ حظر مؤقت من التيليجرام")
         await asyncio.sleep(Config.CHANGE_TIME)
@@ -225,7 +222,7 @@ async def autobio_loop():
     AUTOBIOSTART = gvarstatus("autobio") == "true"
     while AUTOBIOSTART:
         time.strftime("%d.%m.%Y")
-        HI = datetime.now(current_timezone).strftime("%I:%M")
+        HI = datetime.now(joker_timezone).strftime("%I:%M")
         for normal in HI:
             if normal in normzltext:
                 namerzfont = gvarstatus("JP_FN") or "𝟏𝟐𝟑𝟒𝟓𝟔𝟕𝟖𝟗𝟎"
