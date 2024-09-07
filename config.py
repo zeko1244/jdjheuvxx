@@ -6,7 +6,7 @@ class Development(Config):
     # the name to display in your alive message
     ALIVE_NAME = "اسمك ع التليجرام"
     # create any PostgreSQL database (i recommend to use elephantsql) and paste that link here
-    DB_URI = "رابط قاعدة البيانات"
+    DB_URI = "postgresql://postgres:final111@localhost:5432/finalv"
     # After cloning the repo and installing requirements do python3 telesetup.py an fill that value with this
     STRING_SESSION = "كود التيرمكس"
     # create a new bot in @botfather and fill the following vales with bottoken and username respectively
