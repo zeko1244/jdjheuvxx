@@ -8,9 +8,9 @@ from .core.session import l313l
 from .sql_helper.globals import addgvar, delgvar, gvarstatus
 
 __version__ = "3.1.3"
-__license__ = "كـتابة وتـعديل فريـق الجوكر"
-__author__ = "الجوكر <https://T.ME/Jepthon>"
-__copyright__ = "AlJOKER TEAM (C) 2021 - 2023  " + __author__
+__license__ = "كـتابة وتـعديل فريـق سايرون"
+__author__ = "سايرون <https://t.me/sa_eron>"
+__copyright__ = "سايرون TEAM (C) 2021 - 2023  " + __author__
 
 l313l.version = __version__
 l313l.tgbot.version = __version__
